@@ -1,0 +1,19 @@
+# QtCreator by default creates build directories starting with 'build',
+# and we have a default (empty) build directory 'build'
+/build*/
+
+# QtCreator saves user specific project configuration in <projectname>.pro.user
+# and adds a kit version number if Qt is upgraded
+*.pro.user*
+CMakeLists.txt.user*
+
+# QtCreator editor uses extension autosave for intermediate saves
+*.autosave
+
+# Qt localization objects
+*.qm
+
+# ignore generated doxygen files, see bin/run-doxygen
+/project-number.dox
+/doc/doxygen/project-number.dox
+

@@ -1,0 +1,56 @@
+//-------------------------------------------------------------------------
+// This file is part of the Unit Test Demonstration project.
+// It contains the main page of the generated documentation.
+//-------------------------------------------------------------------------
+//
+//    Copyright (C) 2016  Herbert Thielen <thielen@hs-worms.de>
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//-------------------------------------------------------------------------
+
+
+/** 
+\mainpage Design Hints
+
+Welcome to todomat, a little project which shall help handling your private
+TODO list.
+
+It is a `qmake` based project which includes sample unit tests based on Google
+Test and Google Mock.
+
+This project is mainly used as an example using QtCreator, TDD, and GoogleTest;
+feel free to enhance it according to your own needs.
+
+\section s_contents Table of Contents / Modules
+\li \ref g_main
+\li \ref g_applib
+\li \ref g_unittests
+\li \ref s_links
+\li \ref p_license
+
+\section s_links Links
+
+\subsection s_external_links External Pages
+  \li <a href="https://atlas.ai.it.hs-worms.de/bitbucket/projects/TST/repos/googletest/browse/googletest/docs/Primer.md">Google
+    Test Primer</a>
+  \li <a href="https://atlas.ai.it.hs-worms.de/bitbucket/projects/TST/repos/googletest/browse/googlemock/README.md">Google
+    Mock documentation</a>
+  \li <a href="http://en.cppreference.com/w/cpp">C++ Reference</a>
+  \li <a href="http://gcc.gnu.org/onlinedocs/libstdc++/latest-doxygen/">Standard
+    C++ Library (GNU)</a>
+  \li <a href="http://qt-project.org/doc/">Qt Project</a>
+  \li <a href="http://www.doxygen.org">Doxygen Homepage</a>
+
+*/
+// vim: syntax=c++.doxygen sw=2

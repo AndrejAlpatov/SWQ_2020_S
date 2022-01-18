@@ -1,0 +1,79 @@
+#!/bin/bash
+#
+# This script is called by the jenkins build and should do all
+# necessary things.
+#
+ME=${0##*/}
+HOST=$(hostname)
+LINE="======================================================================"
+echo $LINE
+
+[ -n "$OS" ] || [ -n "$ARCH" ] || ARCH=$(arch)
+echo "Started $ME on $HOST (${OS:-$ARCH})"
+echo "Called as \"$0 $@\""
+echo $LINE
+PS4='[\D{%F} \t $ME:$LINENO] '
+export PS4
+set -x
+
+havepath() {
+    OLDIFS=$IFS
+    IFS=:
+    ret=1
+    local search=$1
+    set $PATH
+    for p; do
+	if [ "$p" = "$search" ]; then
+	    ret=0
+	    break;
+	fi
+    done
+    IFS=$OLDIFS
+    return $ret
+}
+
+addpath() {
+    set +x
+    local arg
+    for arg; do
+	[ -d "$arg" -a -x "$arg" ] || continue
+
+	if ! havepath "$arg"; then
+		PATH="$arg:$PATH"
+	fi
+    done
+    set -x
+}
+# Warning: PATH could miss /usr/bin etc. (especially on Windows with Cygwin!)
+addpath /bin /usr/bin /usr/local/bin
+addpath /opt/Qt/*/gcc/bin /opt/Qt/*/gcc_64/bin /usr/local/Qt/*/bin
+addpath $(qmake -query QT_INSTALL_BINS)
+addpath $PWD/bin
+echo "PATH=$PATH"
+echo "$LINE"
+
+set -e			# exit on error
+
+run-build "$@"
+# stop here for make target "clean"
+if [[ $# -eq 1 ]] && [[ "$1" = "clean" ]]; then
+    exit 0
+fi
+
+run-test
+
+# stop here for quick tests on jenkins
+if [[ "$JOB_NAME" =~ "Quick" ]]; then
+    exit 0
+fi
+
+# TODO
+#run-installtest
+
+if [ -x /usr/bin/doxygen ]; then
+    #doxygen is not everywhere installed, avoid errors
+    run-doxygen
+fi
+
+exit $?				# just to get another PS4 output
+

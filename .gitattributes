@@ -1,0 +1,2 @@
+# avoid conversion of LF to CRLF on line endings
+bin/create-buildtag.sh -text

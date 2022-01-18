@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# Small wrapper to call appropriate make / package build commands on
+# Unix and Windows.
+#
+# Arguments are given to make (e.g. make targets, so you may call
+# "run-build clean" to clean the build area).
+#
+ME=${0##*/}
+OSTYPE=$(uname -s | tr [:upper:] [:lower:])
+ARCH=$(uname -m | tr [:upper:] [:lower:])
+LINE="======================================================================"
+
+echo $LINE
+echo "Started $ME on $(hostname) (${OSTYPE}/${ARCH})"
+echo "Called as \"$0 $@\""
+echo $LINE
+PS4='[\D{%F} \t $ME:$LINENO] '
+export PS4
+set -x
+
+MAKE=make        # make, will be modified depending on the os
+QMAKE=qmake      # qmake, will be modified depending on the os
+PROJECT=../src/*.pro	# relative to build directory
+
+
+# adapt build process to different platforms
+case "$OSTYPE" in
+cygwin*)
+   ARCH=x86_64
+   #windows needs another programm to successfully create the distgene application.
+   MAKE="mingw32-make" 
+esac
+
+case "$ARCH" in
+    i686|i386) ARCH="x86" ;;
+esac
+
+# tell make to run simulataneous jobs on multiprocessor systems
+# (make option "-j2" on two processor systems etc.)
+if [ -x /usr/bin/getconf ]; then
+    MAKEFLAGS="${MAKEFLAGS}${MAKEFLAGS:+" "}j$(/usr/bin/getconf _NPROCESSORS_ONLN)"
+    export MAKEFLAGS
+fi
+
+(
+    cd build 
+      
+    # be sure we have the build config ready
+    [ -e "MakeFile" ] || $QMAKE -recursive $PROJECT || exit $?
+
+    $MAKE $@
+    exit $?
+) || exit $?
+
+exit $?       # just to get another PS4 output

@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# run unit tests and more
+#
+ME=${0##*/}
+HOST=$(hostname)
+LINE="======================================================================"
+echo $LINE
+[ -n "$OS" ] || [ -n "$ARCH" ] || ARCH=$(arch)
+echo "Started $ME on $HOST (${OS:-$ARCH})"
+echo "Called as \"$0 $@\""
+echo $LINE
+PS4='[\D{%F} \t $ME:$LINENO] '
+export PS4
+set -x
+set -e
+
+if [ ! -d "build" ]; then
+    echo >&2 "Expecting to be started from trunk, i.e. the subdir 'build' must be available"
+    echo >&2 "Note: PWD is currently <$PWD>"
+    exit 1
+fi
+
+OSTYPE=$(uname -s | tr [:upper:] [:lower:])
+
+# run the tests
+cd build
+./unit-test
+
+# just get another PS4 output
+exit $?

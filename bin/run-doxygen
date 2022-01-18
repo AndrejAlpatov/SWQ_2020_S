@@ -1,0 +1,31 @@
+#!/bin/bash
+
+ME=${0##*/}
+HOST=$(hostname)
+LINE="======================================================================"
+echo $LINE
+echo "Started $ME on $HOST (${OS:-$ARCH})"
+echo "Called as \"$0 $@\""
+echo $LINE
+PS4='[\D{%F} \t $ME:$LINENO] '
+export PS4
+set -x
+
+if [ ! -d "doc/doxygen" ]; then
+    echo >&2 "Expecting to be started from project root directory,"
+    echo >&2 "i.e. the subdir 'doc/doxygen' must be available"
+    echo >&2 "Note: PWD is currently <$PWD>"
+    exit 1
+fi
+
+# e.g. V0.7-12-g6c5af99
+SCM_REVISION=$(git describe --tags --dirty --always | tr ' ' '_')
+# [ -d build/html ] || mkdir build/html
+echo "PROJECT_NUMBER = $SCM_REVISION" > project-number.dox
+# due to a bug jenkins does not search for the @INCLUDE file from the
+# current directory, but obviously from the Doxyfile directory; so
+# create it there too.
+echo "PROJECT_NUMBER = $SCM_REVISION" > doc/doxygen/project-number.dox
+
+doxygen doc/doxygen/Doxyfile
+exit $?			# just to get a $PS4 output
